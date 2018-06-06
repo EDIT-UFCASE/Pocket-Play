@@ -1,0 +1,281 @@
+assistant_file: /home/pi/Downloads/assistant_proj_mKMXdDWxKyw.zip
+skills:
+  - name: pocketPlay
+    intents:
+        - intent: play_Start
+          action: |
+            {%
+            #This is the framework for pocketPlay
+
+            #initialization happens here
+            import os;
+
+
+            #Do any initialization here
+
+
+
+
+
+            #Reads audio input and chooses job accordingly
+            def readJobIntent():
+
+
+                audioIn = str(snips.intent.job_type)  #This will be the audio input variable
+
+
+                     #Different Job slots
+                if (audioIn == "[u'jet']"):
+                    jet()
+                elif (audioIn == "[u'airplane']"):
+                    airplane()
+                elif (audioIn == "[u'helicopter']"):
+                    helicopter()
+                elif (audioIn == "[u'fly']"):
+                    fly()
+                else:
+                    print("Unavailable job intent")  ##Output "I didn't understand or unavailable job" audio
+                    print("Word picked up: {}".format(audioIn))
+
+            def jet():
+                with open("jetflags.txt","w") as file:
+                    file.write("Jet Begins")
+                    os.system("aplay ./pp_wav/Jet_Prompt1.wav")
+
+            def airplane():
+                with open("pilotflags.txt","w") as file:
+                    file.write("Pilot Begins")
+                    os.system("aplay ./pp_wav/prompt1.wav")
+                    os.system("aplay ./pp_wav/prompt2.wav")
+
+            def helicopter():
+                with open("helicopterflags.txt","w") as file:
+                    file.write("Helicopter Begins")
+                    os.system("aplay ./pp_wav/Helicopter_Prompt1.wav")
+            def fly():
+                os.system("aplay ./pp_wav/intro_prompt.wav")
+
+
+            readJobIntent()                
+              %}
+        - intent: pilot
+          action: |
+            {%
+            import os;
+
+            audioIn = str(snips.intent.plane_type)
+
+            def segment2():
+                if (audioIn == "[u'big plane']"):
+                    os.system("aplay ./pp_wav/bigplane.wav")
+                elif (audioIn == "[u'long plane']"):
+                    os.system("aplay ./pp_wav/longplane.wav")
+                elif (audioIn == "[u'fast plane']"):
+                    os.system("aplay ./pp_wav/fastplane.wav")
+                elif (audioIn == "[u'sea plane']"):
+                    os.system("aplay ./pp_wav/seaplane.wav")
+                else:
+                    print("We already choose one of those options Seg 2")
+                    exit()
+
+                os.system("aplay ./pp_wav/prompt3.wav")
+
+                with open("pilotflags.txt","w") as file:
+                    file.write("Segment2 complete")
+
+            def segment3():
+                if (audioIn == "[u'sunny']"):
+                    os.system("aplay ./pp_wav/sunny.wav")
+                elif (audioIn == "[u'rainy']"):
+                    os.system("aplay ./pp_wav/rainy.wav")
+                elif (audioIn == "[u'stormy']"):
+                    os.system("aplay ./pp_wav/stormy.wav")
+                elif (audioIn == "[u'windy']"):
+                    os.system("aplay ./pp_wav/windy.wav")
+                else:
+                    print("We already choose one of those options Seg 3")
+                    exit()
+
+                os.system("aplay ./pp_wav/prompt4.wav")
+
+                with open("pilotflags.txt","w") as file:
+                    file.write("Segment3 complete")
+
+            def segment4():
+                if (audioIn == "[u'mountains']"):
+                    os.system("aplay ./pp_wav/mountains.wav")
+                elif (audioIn == "[u'desert']"):
+                    os.system("aplay ./pp_wav/desert.wav")
+                elif (audioIn == "[u'city']"):
+                    os.system("aplay ./pp_wav/city.wav")
+                elif (audioIn == "[u'ocean']"):
+                    os.system("aplay ./pp_wav/ocean.wav")
+                else:
+                    print("We already choose one of those options Seg 4")
+                    exit()
+                with open("pilotflags.txt","w") as file:
+                    file.write("Segment4 complete")
+                    os.system("sudo rm pilotflags.txt")
+
+            try:
+                with open("pilotflags.txt","r") as file:
+
+                    filelist = file.readlines()
+                    segmentcomplete = filelist[len(filelist) - 1]
+                    print(segmentcomplete)
+
+                    if (segmentcomplete == "Pilot Begins"):
+                        segment2()
+                    elif (segmentcomplete == "Segment2 complete"):
+                        segment3()
+                    elif (segmentcomplete == "Segment3 complete"):
+                        segment4()
+                    else:
+                        print("Story Progress not Complete")
+
+
+            except Exception:
+                print("File not found")
+
+
+
+              %}
+
+        - intent: jet
+          action: |
+            {%
+            import os;
+
+            audioIn = str(snips.intent.jet_type)
+
+            def segment2():
+                if (audioIn == "[u'lion']" or audioIn == "[u'roar']" ):
+                    os.system("aplay ./pp_wav/Jet_Response1_Roar.wav")
+                elif (audioIn == "[u'high']" or audioIn == "[u'eagle']"):
+                    os.system("aplay ./pp_wav/Jet_Response1_LiftHigh.wav")
+                else:
+                    print("We already choose one of those options Seg 2")
+                    exit()
+
+                os.system("aplay ./pp_wav/Jet_Prompt2.wav")
+
+                with open("jetflags.txt","w") as file:
+                    file.write("Segment2 complete")
+
+            def segment3():
+                if (audioIn == "[u'invisible']"):
+                    os.system("aplay ./pp_wav/Jet_Response2_Invisible.wav")
+                elif (audioIn == "[u'submarine']"):
+                    os.system("aplay ./pp_wav/Jet_Response2_Sub.wav")
+                elif (audioIn == "[u'car']"):
+                    os.system("aplay ./pp_wav/Jet_Response2_Car.wav")
+                else:
+                    print("We already choose one of those options Seg 3")
+                    exit()
+
+                os.system("aplay ./pp_wav/Jet_Prompt3.wav")
+
+                with open("jetflags.txt","w") as file:
+                    file.write("Segment3 complete")
+
+            def segment4():
+                if (audioIn == "[u'speed']"):
+                    os.system("aplay ./pp_wav/Jet_Response3_Fast(2).wav")
+                elif (audioIn == "[u'height']"):
+                    os.system("aplay ./pp_wav/Jet_Response3_High.wav")
+                elif (audioIn == "[u'distance']"):
+                    os.system("aplay ./pp_wav/Jet_Response3_Far.wav")
+                else:
+                    print("We already choose one of those options Seg 4")
+                    exit()
+                with open("jetflags.txt","w") as file:
+                    file.write("Segment4 complete")
+                    os.system("sudo rm jetflags.txt")
+
+            try:
+                with open("jetflags.txt","r") as file:
+
+                    filelist = file.readlines()
+                    segmentcomplete = filelist[len(filelist) - 1]
+                    print(segmentcomplete)
+
+                    if (segmentcomplete == "Jet Begins"):
+                        segment2()
+                    elif (segmentcomplete == "Segment2 complete"):
+                        segment3()
+                    elif (segmentcomplete == "Segment3 complete"):
+                        segment4()
+                    else:
+                        print("Story Progress not Complete")
+
+
+            except Exception:
+                print("File not found")
+
+
+
+              %}
+
+        - intent: helicopter
+          action: |
+            {%
+            import os;
+
+            audioIn = str(snips.intent.helicopter_type)
+
+            def segment2():
+                if (audioIn == "[u'building']"):
+                    os.system("aplay ./pp_wav/Helicopter_Response1_Building.wav")
+                elif (audioIn == "[u'sand']"):
+                    os.system("aplay ./pp_wav/Helicopter_Response1_Sandy.wav")
+                elif (audioIn == "[u'rocks']"):
+                    os.system("aplay ./pp_wav/Helicopter_Response1_Rocky.wav")
+                else:
+                    print("Unacceptable word. Please choose a valid Seg 2 option\n")
+                    print("Picked up: {}".format(audioIn))
+                    exit()
+
+                os.system("aplay ./pp_wav/Helicopter_Prompt2.wav")
+
+                with open("helicopterflags.txt","w") as file:
+                    file.write("Segment2 complete")
+
+            def segment3():
+                if (audioIn == "[u'mountain climbers']"):
+                    os.system("aplay ./pp_wav/Helicopter_Response2_MountainClimbers.wav")
+                elif (audioIn == "[u'trees']"):
+                    os.system("aplay ./pp_wav/Helicopter_Response2_Trees.wav")
+                elif (audioIn == "[u'swimmer']"):
+                    os.system("aplay ./pp_wav/Helicopter_Response2_Swimmer.wav")
+                else:
+                    print("We already choose one of those options Seg 3")
+                    exit()
+
+                os.system("aplay ./pp_wav/Helicopter_Prompt3.wav")
+
+                with open("helicopterflags.txt","w") as file:
+                    file.write("Segment3 complete")
+                    os.system("sudo rm helicopterflags.txt")
+
+
+            try:
+                with open("helicopterflags.txt","r") as file:
+
+                    filelist = file.readlines()
+                    segmentcomplete = filelist[len(filelist) - 1]
+                    print(segmentcomplete)
+
+                    if (segmentcomplete == "Helicopter Begins"):
+                        segment2()
+                    elif (segmentcomplete == "Segment2 complete"):
+                        segment3()
+                    else:
+                        print("Story Progress not Complete")
+
+
+            except Exception:
+                print("File not found")
+
+
+
+              %}

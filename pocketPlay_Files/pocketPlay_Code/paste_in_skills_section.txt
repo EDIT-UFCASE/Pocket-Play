@@ -1,0 +1,8 @@
+skills:
+  - name: pocketPlay
+    intents:
+      - intent: play_Start
+        action: |
+          {%
+          *paste code here
+          %}
